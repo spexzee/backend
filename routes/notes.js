@@ -45,12 +45,6 @@ router.post('/addnote', fetchuser, [
 //Route3
 //update note : PUT: '/api/notes/updatenote' login required
 router.put('/updatenotes/:id', fetchuser, async (req, res) => {
-    //if error occures give bad request and error message
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
-    }
-
 
     const { title, description, tag } = req.body
 
@@ -61,15 +55,18 @@ router.put('/updatenotes/:id', fetchuser, async (req, res) => {
         if (description) { newNote.description = description };
         if (tag) { newNote.tag = tag };
 
-        //find the note and uodate
+        //find if note exist or not
         let note = await Notes.findById(req.params.id);
         if (!note) { return res.status(404).send("Not Found") };
 
+        //allow update only if user owns this
         if (note.user.toString() !== req.user.id) {
             return res.status(401).send("Not Allowed")
         }
+
+        // update note 
         note = await Notes.findByIdAndUpdate(req.params.id, { $set: newNote }, { new: true })
-        res.json({ note })
+        res.json({ Success: 'Note Updated Successfully', note })
 
     }
     catch (error) {
@@ -78,5 +75,30 @@ router.put('/updatenotes/:id', fetchuser, async (req, res) => {
     }
 
 })
+
+// Route4
+//delete note : DELETE: '/api/notes/deletenote' login required
+
+router.delete('/deletenote/:id', fetchuser, async (req, res) => {
+    try {
+        //find if note exist or not
+        let note = await Notes.findById(req.params.id);
+        if (!note) { return res.status(404).send("Not Found") };
+
+        //allow deletion only if user owns this
+        if (note.user.toString() !== req.user.id) {
+            return res.status(401).send("Not Allowed")
+        }
+
+        //delete note
+        note = await Notes.findByIdAndDelete(req.params.id)
+        res.json({ Success: 'Note Deleted Successfully', note })
+    }
+    catch (error) {
+        console.error(error.message);
+        res.status(500).send('internal server error')
+    }
+})
+
 
 module.exports = router
