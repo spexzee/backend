@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 
 const connectToMongo = require('./db');
 
@@ -7,6 +8,7 @@ const port = 5000;
 
 
 //middleware
+app.use(cors())
 app.use(express.json()) //if we dont use this req.body will print undefined
 
 //Available routes
