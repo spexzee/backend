@@ -5,7 +5,11 @@ const mongoURI = 'mongodb+srv://spexzee:Spexzee786@clusternote.jjk6c0u.mongodb.n
 
 async function connectToMongo() {
     try {
-        await mongoose.connect(mongoURI);
+        await mongoose.connect(mongoURI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            serverSelectionTimeoutMS: 5000,
+        });
         console.log('Connected to MongoDB');
     } catch (error) {
         console.error('Error connecting to MongoDB:', error);
