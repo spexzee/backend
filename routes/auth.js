@@ -16,17 +16,18 @@ router.post('/createuser', [
     body('email', 'Enter valid email').isEmail(),
     body('password', 'Password must be atleast 8 characters').isLength({ min: 8 }),
 ], async (req, res) => {
+    let success = false;
     //if error occures give bad request and error message
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
+        return res.status(400).json({ success, errors: errors.array() })
     }
 
     try {
         // chec user already exist or not
         let user = await User.findOne({ email: req.body.email });
         if (user) {
-            return res.status(400).json({ error: 'sorry this Email already exists' })
+            return res.status(400).json({ success, error: 'sorry this Email already exists' })
         }
 
         //securing password using bcrypt package (this converts password string into hash characters)
@@ -69,10 +70,11 @@ router.post('/login', [
     body('email', 'Enter valid email').isEmail(),
     body('password', 'Password cannot be blank').exists(),
 ], async (req, res) => {
+    let success = false;
     //if error occures give bad request and error message
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
+        return res.status(400).json({ success, errors: errors.array() })
     }
 
     const { email, password } = req.body //destructing method
@@ -82,7 +84,7 @@ router.post('/login', [
 
         //if not coorect gives bad request and error msg
         if (!user) {
-            return res.status(400).json({ msg: 'Please enter valid information' });
+            return res.status(400).json({ success, msg: 'Please enter valid information' });
         }
 
         //it checks entered passwoed and user password is matching or not
@@ -91,6 +93,7 @@ router.post('/login', [
         //if password not matched gives bad request and error msg
         if (!passwordCmpare) {
             return res.status(400).json({
+                success,
                 msg: 'Please enter valid information'
             })
         }
@@ -101,9 +104,15 @@ router.post('/login', [
                 id: user.id
             }
         }
+<<<<<<< HEAD
         const authtoken = jwt.sign(data, process.env.JWT_SECRET)
 
         res.json({ authtoken })
+=======
+        const authtoken = jwt.sign(data, JWT_SECRET)
+        success = true;
+        res.json({ success, authtoken })
+>>>>>>> 3598fff241d2ad47ff02b9fe515f2c3a01414096
     }
     catch (error) {
         console.error(error.message);
