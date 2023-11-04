@@ -7,8 +7,6 @@ const jwt = require('jsonwebtoken');
 const fetchuser = require('../middleware/fetchuser');
 
 
-const JWT_SECRET = 'abuisagoodboy';
-
 
 //Route1
 // creating user : POST '/api/auth/createuser' , no login requried 
@@ -51,7 +49,7 @@ router.post('/createuser', [
                 id: user.id //when ever user gives us to given token , we give this id (means id represent user data)
             }
         }
-        const authtoken = jwt.sign(data, JWT_SECRET)
+        const authtoken = jwt.sign(data, process.env.JWT_SECRET)
 
         res.json({ authtoken })
         // res.json(user)
@@ -103,7 +101,7 @@ router.post('/login', [
                 id: user.id
             }
         }
-        const authtoken = jwt.sign(data, JWT_SECRET)
+        const authtoken = jwt.sign(data, process.env.JWT_SECRET)
 
         res.json({ authtoken })
     }
