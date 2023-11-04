@@ -104,15 +104,9 @@ router.post('/login', [
                 id: user.id
             }
         }
-<<<<<<< HEAD
         const authtoken = jwt.sign(data, process.env.JWT_SECRET)
 
         res.json({ authtoken })
-=======
-        const authtoken = jwt.sign(data, JWT_SECRET)
-        success = true;
-        res.json({ success, authtoken })
->>>>>>> 3598fff241d2ad47ff02b9fe515f2c3a01414096
     }
     catch (error) {
         console.error(error.message);
