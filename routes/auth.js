@@ -18,17 +18,18 @@ router.post('/createuser', [
     body('email', 'Enter valid email').isEmail(),
     body('password', 'Password must be atleast 8 characters').isLength({ min: 8 }),
 ], async (req, res) => {
+    let success = false;
     //if error occures give bad request and error message
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
+        return res.status(400).json({ success, errors: errors.array() })
     }
 
     try {
         // chec user already exist or not
         let user = await User.findOne({ email: req.body.email });
         if (user) {
-            return res.status(400).json({ error: 'sorry this Email already exists' })
+            return res.status(400).json({ success, error: 'sorry this Email already exists' })
         }
 
         //securing password using bcrypt package (this converts password string into hash characters)
@@ -52,8 +53,8 @@ router.post('/createuser', [
             }
         }
         const authtoken = jwt.sign(data, JWT_SECRET)
-
-        res.json({ authtoken })
+        success = true;
+        res.json({ success, authtoken })
         // res.json(user)
 
     }
