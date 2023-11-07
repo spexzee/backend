@@ -10,8 +10,8 @@ const port = process.env.PORT || 5000;
 //middleware
 app.use(cors(
 {
-    origin: '*',
-    methods: ["POST", "GET"],
+    origin: 'https://spexzee-notebook.netlify.app',
+    methods: ["POST", "GET" , "PUT" , "DELETE"],
     credentials: true
 }));
 app.use(express.json()) //if we dont use this req.body will print undefined
