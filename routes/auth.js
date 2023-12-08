@@ -42,6 +42,7 @@ router.post('/createuser', [
             name: req.body.name,
             email: req.body.email,
             password: secPass,
+            profilePic : req.body.profilePic
         })
 
 
