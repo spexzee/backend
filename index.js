@@ -20,9 +20,9 @@ app.use(express.json()) //if we dont use this req.body will print undefined
 app.use('/api/auth', require('./routes/auth'))
 app.use('/api/notes', require('./routes/notes'))
 
-// app.get('/', (req, res) => {
-//     res.send("Hello World");
-// })
+app.get('/', (req, res) => {
+    res.send("Welcome to iNote-Book");
+})
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 })
