@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000;
 //middleware
 app.use(cors(
 {
-    origin: 'https://spexzee-notebook.netlify.app',
+    origin: '*',
     methods: ["POST", "GET" , "PUT" , "DELETE"],
     credentials: true
 }));
